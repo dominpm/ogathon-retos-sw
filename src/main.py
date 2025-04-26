@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Query, HTTPException
 from patterns import patterns
 from core import count_numbers_with_89
+from third import minimal_moves
+from typing import List
 
 app = FastAPI(
     title="Ogathon Challenges API",
@@ -26,3 +28,10 @@ def solution_2(n: int = Query(..., gt=0, le=10_000_000)):
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     return str(result)
+
+@app.post("/challenges/solution-3", summary="Devuelve los movimientos mínimos")
+def solve(request : List[List[int]]) -> str:
+    try:
+        return str(minimal_moves(request))
+    except Exception as ex:
+        raise HTTPException(status_code=400, detail=str(ex))
